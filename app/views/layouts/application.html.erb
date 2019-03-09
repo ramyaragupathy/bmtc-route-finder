@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>MySite</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= stylesheet_link_tag    'https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.1/mapbox-gl.css', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= stylesheet_link_tag    'https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.1/mapbox-gl.js', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'https://code.jquery.com/jquery-3.3.1.slim.min.js', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js', 'data-turbolinks-track': 'reload' %>
+    
+    <style>
+      body { margin:0; padding:0; }
+      #map { width:1000px;  height: 700px }
+    </style>
+  </head>
+
+  <body>
+  <div class="container">
+    
+
+  <div class="row">
+  <div class="col-3">
+  <%= form_tag("/search", method: "get") do %>
+      <%= label_tag(:bus_number, "Search for:") %>
+      <%= text_field_tag(:bus_number) %>
+      <% if @error.present? %>
+          <%= label_tag(@error) %>
+      <% end %>
+      <%= submit_tag("Search") %>
+  <% end %>
+  <br>
+  <%= yield %>
+  </div>
+  <div class="col-6">
+  <div id='map'></div>
+  </div>
+  
+</div>
+
+
+
+
+
+
+  </div>
+   
+<script>
+mapboxgl.accessToken = 'pk.eyJ1IjoiaG90IiwiYSI6IlBtUmNiR1kifQ.dCS1Eu9DIRNZGktc24IwtA';
+var map = new mapboxgl.Map({
+container: 'map', // container id
+style: 'mapbox://styles/mapbox/light-v9', // stylesheet location
+center: [77.6221,12.9889], // starting position [lng, lat]
+zoom: 9 // starting zoom
+});
+map.on('load', function () {
+ 
+map.addLayer({
+"id": "points",
+"type": "circle",
+"source": {
+"type": "geojson",
+"data": {
+"type": "FeatureCollection",
+"features": <%= raw @features.to_json || [] %>
+}
+},
+"paint": {
+"circle-color" : "#fbb03b",
+"circle-radius" : 5,
+"circle-opacity" : 0.5
+}
+});
+});
+
+</script>
+  </body>
+</html>

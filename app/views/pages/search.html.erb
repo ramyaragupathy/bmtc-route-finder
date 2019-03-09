@@ -1,0 +1,15 @@
+<div class="main">
+    <div class="container">
+    <% if @error_message.present? %>
+        <h1><%= @error_message %></h1>
+    <% else %>
+        <h1><%= @bmtc_route.bus_number %></h1>
+        <ul>            
+          <% @stops.each do |stop| %>
+            <li> <%= stop %> </li>
+          <% end %>
+        </ul>
+        
+    <% end %>             
+	</div>
+</div>
